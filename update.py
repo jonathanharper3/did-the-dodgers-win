@@ -109,5 +109,5 @@ html_content = f'''
 '''
 
 # Write the HTML to a file
-with open("dodgers_game_status.html", "w") as file:
+with open("index.html", "w") as file:
     file.write(html_content)
