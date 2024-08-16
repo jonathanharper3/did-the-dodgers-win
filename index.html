@@ -11,6 +11,7 @@
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -33,6 +34,14 @@
             font-size: 1.5em;
             margin: 0.5em 0;
         }
+
+        .spacer {
+            margin: 2em 0; /* Adds vertical spacing */
+        }
+
+        .small-text {
+            font-size: 0.8em; /* Smaller font size */
+        }
     </style>
 </head>
 <body>
@@ -40,6 +49,10 @@
         <h1>did the dodgers win?</h1>
         <p>nope</p>
         <p>up next: Aug 16, LAD @ STL</p>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+        <p class="small-text">last updated: 2024-08-16 13:23:27 EDT</p>
     </div>
 </body>
 </html>
