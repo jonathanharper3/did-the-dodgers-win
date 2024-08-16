@@ -1,6 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
+import pytz
 
+# Fetch the web page
 url = 'https://www.baseball-reference.com/teams/LAD/2024-schedule-scores.shtml'
 response = requests.get(url)
 html_content = response.text
@@ -10,6 +13,7 @@ soup = BeautifulSoup(html_content, 'html.parser')
 results = []
 upcoming = []
 
+# Extract data
 span_tags = soup.find_all('span', class_='poptip')
 for span in span_tags:
     tip_text = span.get('tip')
@@ -25,10 +29,23 @@ if 'lost' in results[-1]:
 elif 'beat' in results[-1]:
     result_text = 'yep'
 else:
-    result_text = 'no clue'
+    result_text = "no clue"
 
 # Get the upcoming game info
-upcoming_game = upcoming[0] if upcoming else "nothing"
+upcoming_game = upcoming[0] if upcoming else "No upcoming games"
+
+# Get the current date and time in UTC
+utc_now = datetime.utcnow()
+
+# Convert UTC time to EST/EDT
+utc_zone = pytz.utc
+est_zone = pytz.timezone('America/New_York')
+
+utc_now = utc_zone.localize(utc_now)
+est_time = utc_now.astimezone(est_zone)
+
+# Format date and time
+formatted_date_time = est_time.strftime('%Y-%m-%d %H:%M:%S %Z')
 
 # Generate HTML content
 html_content = f'''
@@ -44,6 +61,7 @@ html_content = f'''
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -66,6 +84,14 @@ html_content = f'''
             font-size: 1.5em;
             margin: 0.5em 0;
         }}
+
+        .spacer {{
+            margin: 2em 0; /* Adds vertical spacing */
+        }}
+
+        .small-text {{
+            font-size: 0.8em; /* Smaller font size */
+        }}
     </style>
 </head>
 <body>
@@ -73,6 +99,10 @@ html_content = f'''
         <h1>did the dodgers win?</h1>
         <p>{result_text}</p>
         <p>up next: {upcoming_game}</p>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+        <p class="small-text">last updated: {formatted_date_time}</p>
     </div>
 </body>
 </html>
