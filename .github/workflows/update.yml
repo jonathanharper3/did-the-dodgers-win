@@ -30,6 +30,6 @@ jobs:
       run: |
         git config --global user.email "tojonathanharper@gmail.com"
         git config --global user.name "Jonathan Harper"
-        git add dodgers_game_status.html
+        git add index.html
         git commit -m "Auto-update did the dodgers win"
         git push
