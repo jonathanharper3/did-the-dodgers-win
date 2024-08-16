@@ -27,9 +27,11 @@ jobs:
         python update.py
 
     - name: Commit and Push Changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       run: |
         git config --global user.email "tojonathanharper@gmail.com"
         git config --global user.name "Jonathan Harper"
         git add index.html
-        git commit -m "Auto-update did the dodgers win"
-        git push
+        git commit -m "Auto-update did the dodgers win" || echo "No changes to commit"
+        git push https://github.com/jonathanharper3/did-the-dodgers-win.git HEAD:main
