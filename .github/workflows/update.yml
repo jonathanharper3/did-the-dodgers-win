@@ -1,0 +1,35 @@
+name: update did the dodgers win
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # This cron schedule runs daily at 2 AM UTC (adjust to your preferred time)
+  workflow_dispatch:  # Allows you to manually trigger the workflow if needed
+
+jobs:
+  update-page:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set Up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt  # Install necessary Python packages
+
+    - name: Run Python Script
+      run: |
+        python update.py  # Run your Python script to scrape data and generate HTML
+
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.email "tojonathanharper@gmail.com"
+        git config --global user.name "Jonathan Harper"
+        git add dodgers_game_status.html
+        git commit -m "Auto-update did the dodgers win"
+        git push
