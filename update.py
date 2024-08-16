@@ -25,10 +25,10 @@ if 'lost' in results[-1]:
 elif 'beat' in results[-1]:
     result_text = 'yep'
 else:
-    result_text = "no clue"
+    result_text = 'no clue'
 
 # Get the upcoming game info
-upcoming_game = upcoming[0] if upcoming else "No upcoming games"
+upcoming_game = upcoming[0] if upcoming else "nothing"
 
 # Generate HTML content
 html_content = f'''
