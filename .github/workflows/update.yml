@@ -2,8 +2,8 @@ name: update did the dodgers win
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # This cron schedule runs daily at 2 AM UTC (adjust to your preferred time)
-  workflow_dispatch:  # Allows you to manually trigger the workflow if needed
+    - cron: '0 9 * * *'  # 9 AM UTC
+  workflow_dispatch:
 
 jobs:
   update-page:
@@ -20,11 +20,11 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        pip install -r requirements.txt  # Install necessary Python packages
+        pip install -r requirements.txt
 
     - name: Run Python Script
       run: |
-        python update.py  # Run your Python script to scrape data and generate HTML
+        python update.py
 
     - name: Commit and Push Changes
       run: |
