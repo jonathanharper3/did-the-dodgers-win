@@ -86,11 +86,11 @@ html_content = f'''
         }}
 
         .spacer {{
-            margin: 2em 0; /* Adds vertical spacing */
+            margin: 2em 0;
         }}
 
         .small-text {{
-            font-size: 0.8em; /* Smaller font size */
+            font-size: 0.8em;
         }}
     </style>
 </head>
