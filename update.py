@@ -32,7 +32,7 @@ else:
     result_text = "no clue"
 
 # Get the upcoming game info
-upcoming_game = upcoming[0] if upcoming else "No upcoming games"
+upcoming_game = upcoming[0] if upcoming else "no upcoming games"
 
 # Get the current date and time in UTC
 utc_now = datetime.utcnow()
