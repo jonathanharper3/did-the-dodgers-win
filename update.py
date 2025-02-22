@@ -18,6 +18,7 @@ headers = {"Ocp-Apim-Subscription-Key": api_key}  # Some APIs require headers
 response = requests.get(url, headers=headers)
 
 games = response.json()
+result_text = ''
 for game in games:
     if game['AwayTeam'] == 'LAD' or game['HomeTeam'] == 'LAD':
         if game['AwayTeam'] == 'LAD':
@@ -34,6 +35,8 @@ for game in games:
                 result_text = 'yep'
             else:
                 result_text = 'nope'
+        if result_text == '':
+            result_text = 'no game today'
                 
 url = f"https://api.sportsdata.io/v3/mlb/scores/json/Games/2025"
 api_key = "86f6d790e07d4c4cacddef80790bec22"  # Keep API keys private!
