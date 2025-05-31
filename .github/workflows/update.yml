@@ -1,39 +1,32 @@
 name: update did the dodgers win
-
 on:
    schedule:
-     - cron: '0 9 * * *'  # 9 AM UTC
+     - cron: '0 9 * * *'  # 9 AM UTC daily
    workflow_dispatch:
-
 jobs:
   update-page:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4  # Updated to latest version
       with:
-        token: ${{ secrets.ACCESS_TOKEN }}  # Use PAT for checkout
-
+        token: ${{ secrets.ACCESS_TOKEN }}
     - name: Set Up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4  # Updated to latest version
       with:
         python-version: '3.x'
-
     - name: Install Dependencies
       run: |
         pip install -r requirements.txt
-
     - name: Run Python Script
       run: |
         python update.py
-
     - name: Commit and Push Changes
       env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}  # Use PAT for push
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       run: |
         git config --global user.email "tojonathanharper@gmail.com"
         git config --global user.name "Jonathan Harper"
-        git add index.html
-        git commit -m "Auto-update did the dodgers win" || echo "No changes to commit"
+        git add *.html  # Add all HTML files (index.html + all team pages)
+        git commit -m "Auto-update baseball team pages" || echo "No changes to commit"
         git push
