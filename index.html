@@ -1,66 +1,98 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>did the dodgers win</title>
-    <style>
-        body {
-            background-color: #005A9C; /* Dodger Blue */
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>this is baseball</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100vh;
+                font-family: Arial, sans-serif;
+            }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px; /* Ensure some top spacing */
-        }
+            .container {
+                height: 37.5vh; /* 3/8 of viewport height */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+            }
 
-        h1 {
-            font-size: 3em;
-            margin-bottom: 0.5em; /* Add some spacing below the header */
-        }
+            h1 {
+                margin: 0;
+                font-size: 2em;
+            }
 
-        p {
-            font-size: 1.5em;
-            margin: 0.5em 0;
-        }
+            .controls {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
 
-        img {
-            width: 80%; /* Makes the image take 80% of the container width */
-            max-width: 600px; /* Ensure the image doesn't get too large */
-            height: auto; /* Maintain aspect ratio */
-            margin-top: 20px; /* Add spacing between text and image */
-        }
+            #teamDropdown {
+                padding: 8px;
+                font-size: 16px;
+            }
 
-        .spacer {
-            margin: 2em 0; /* Adds vertical spacing */
-        }
-
-        .small-text {
-            font-size: 0.8em; /* Smaller font size */
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>did the dodgers win?</h1>
-        <p>yep</p>
-        <p>up next: 2025-05-31, NYY @ LAD</p>
-        <div class="spacer"></div>
-        <div class="spacer"></div>
-        <div class="spacer"></div>
-        <p class="small-text">last updated: 2025-05-31 05:12:30 EDT</p>
-    </div>
-</body>
-</html>
+            button {
+                padding: 8px 16px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+        </style>          
+    </head>
+    <body>
+        <div class="container">
+            <h1>pick your team</h1>
+            <div class="controls">
+                <select id="teamDropdown">
+                    <option value="" disabled selected>select:</option>
+                    <option value="diamondbacks">arizona diamondbacks</option>
+                    <option value="braves">atlanta braves</option>
+                    <option value="orioles">baltimore orioles</option>
+                    <option value="red sox">boston red sox</option>
+                    <option value="cubs">chicago cubs</option>
+                    <option value="white sox">chicago white sox</option>
+                    <option value="reds">cincinnati reds</option>
+                    <option value="guardians">cleveland guardians</option>
+                    <option value="rockies">colorado rockies</option>
+                    <option value="tigers">detroit tigers</option>
+                    <option value="athletics">homeless athletics</option>
+                    <option value="astros">houston astros</option>
+                    <option value="royals">kansas city royals</option>
+                    <option value="angels">los angeles angels</option>
+                    <option value="dodgers">los angeles dodgers</option>
+                    <option value="marlins">miami marlins</option>
+                    <option value="brewers">milwaukee brewers</option>
+                    <option value="twins">minnesota twins</option>
+                    <option value="mets">new york mets</option>
+                    <option value="yankees">new york yankees</option>
+                    <option value="phillies">philidelphia phillies</option>
+                    <option value="pirates">pittsburgh pirates</option>
+                    <option value="padres">san diego padres</option>
+                    <option value="giants">san francisco giants</option>
+                    <option value="mariners">seattle mariners</option>
+                    <option value="cardinals">st. louis cardinals</option>
+                    <option value="rays">tampa bay rays</option>
+                    <option value="rangers">texas rangers</option>
+                    <option value="blue jays">toronto blue jays</option>
+                    <option value="nationals">washington nationals</option>
+                </select>
+                <button onclick="redirectToTeamPage()">Select</button>
+            </div>
+        </div>
+        <script>
+            function redirectToTeamPage() {
+            const team = document.getElementById("teamDropdown").value;
+                if (team) {
+                    window.location.href = `${team}.html`;
+                } else{
+                    alert("team?");
+                }
+            }
+        </script>
+    </body>
+    </html>
+    
