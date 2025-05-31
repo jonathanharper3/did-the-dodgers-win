@@ -1,6 +1,130 @@
 import requests
 from datetime import datetime, timedelta
 import pytz
+import pandas as pd
+
+teams = {
+      'arizona diamondbacks': {
+          'abbr': 'ARI'
+        , 'color': '#E3D4AD' ## gold
+        , 'nickname': 'diamondbacks'}
+    , 'atlanta braves': {
+          'abbr': 'ATL'
+        , 'color': '#CE1141' ## red
+        , 'nickname': 'braves'}
+    , 'baltimore orioles': {
+          'abbr': 'BAL'
+        , 'color': '#DF4601' ## orange
+        , 'nickname': 'orioles'}
+    , 'boston red sox': {
+          'abbr': 'BOS'
+        , 'color': '#BD3039' ## red
+        , 'nickname': 'red sox'}
+    , 'chicago cubs': {
+          'abbr': 'CHC'
+        , 'color': '#0E3386' ## blue
+        , 'nickname': 'cubs'}
+    , 'chicago white sox': {
+          'abbr': 'CHW'
+        , 'color': '#C4CED4' ## silver
+        , 'nickname': 'white sox'}
+    , 'cincinnati reds': {
+          'abbr': 'CIN'
+        , 'color': '#C6011F' ## red
+        , 'nickname': 'reds'}
+    , 'cleveland guardians': {
+          'abbr': 'CLE'
+        , 'color': '#E50022' ## red
+        , 'nickname': 'guardians'}
+    , 'colorado rockies': {
+          'abbr': 'COL'
+        , 'color': '#333366' ## purple
+        , 'nickname': 'rockies'}
+    , 'detroit tigers': {
+          'abbr': 'DET'
+        , 'color': '#FA4616' ## orange
+        , 'nickname': 'tigers'}
+    , 'homeless athletics': {
+          'abbr': 'ATH'
+        , 'color': '#003831' ## green
+        , 'nickname': 'athletics'}
+    , 'houston astros': {
+          'abbr': 'HOU'
+        , 'color': '#EB6E1F' ## orange
+        , 'nickname': 'astros'}
+    , 'kansas city royals': {
+          'abbr': 'KC'
+        , 'color': '#004687' ## blue
+        , 'nickname': 'royals'}
+    , 'los angeles angels': {
+          'abbr': 'LAA'
+        , 'color': '#BA0021' ## red
+        , 'nickname': 'angels'}
+    , 'los angeles dodgers': {
+          'abbr': 'LAD'
+        , 'color': '#005A9C' ## blue
+        , 'nickname': 'dodgers'}
+    , 'miami marlins': {
+          'abbr': 'MIA'
+        , 'color': '#00A3E0' ## blue
+        , 'nickname': 'marlins'}
+    , 'milwaukee brewers': {
+          'abbr': 'MIL'
+        , 'color': '#FFC52F' ## yellow
+        , 'nickname': 'brewers'}
+    , 'minnesota twins': {
+          'abbr': 'MIN'
+        , 'color': '#D31145' ## red
+        , 'nickname': 'twins'}
+    , 'new york mets': {
+          'abbr': 'NYM'
+        , 'color': '#FF5910' ## orange
+        , 'nickname': 'mets'}
+    , 'new york yankees': {
+          'abbr': 'NYY'
+        , 'color': '#C4CED3' ## gray
+        , 'nickname': 'yankees'}
+    , 'philadelphia phillies': {
+          'abbr': 'PHI'
+        , 'color': '#E81828' ## red
+        , 'nickname': 'phillies'}
+    , 'pittsburgh pirates': {
+          'abbr': 'PIT'
+        , 'color': '#FDB827' ## gold
+        , 'nickname': 'pirates'}
+    , 'san diego padres': {
+          'abbr': 'SD'
+        , 'color': '#FFC425' ## gold
+        , 'nickname': 'padres'}
+    , 'san francisco giants': {
+          'abbr': 'SF'
+        , 'color': '#FD5A1E' ## orange
+        , 'nickname': 'giants'}
+    , 'seattle mariners': {
+          'abbr': 'SEA'
+        , 'color': '#005C5C' ## green
+        , 'nickname': 'mariners'}
+    , 'st. louis cardinals': {
+          'abbr': 'STL'
+        , 'color': '#C41E3A' ## red
+        , 'nickname': 'cardinals'}
+    , 'tampa bay rays': {
+          'abbr': 'TB'
+        , 'color': '#8FBCE6' ## blue
+        , 'nickname': 'rays'}
+    , 'texas rangers': {
+          'abbr': 'TEX'
+        , 'color': '#003278' ## blue
+        , 'nickname': 'rangers'}
+    , 'toronto blue jays': {
+          'abbr': 'TOR'
+        , 'color': '#134A8E' ## blue
+        , 'nickname': 'blue jays'}
+    , 'washington nationals': {
+          'abbr': 'WSH'
+        , 'color': '#AB0003' ## red
+        , 'nickname': 'nationals'}
+}
 
 utc_now = datetime.utcnow()
 utc_zone = pytz.utc
@@ -10,128 +134,283 @@ est_time = utc_now.astimezone(est_zone)
 date = (est_time - timedelta(days=1)).strftime('%Y-%m-%d')
 est = est_time.strftime('%Y-%m-%d %H:%M:%S %Z')
 
-url = f"https://api.sportsdata.io/v3/mlb/scores/json/ScoresBasic/{date}"
-api_key = "86f6d790e07d4c4cacddef80790bec22"  # Keep API keys private!
+url = f'https://api.sportsdata.io/v3/mlb/scores/json/ScoresBasic/{date}'
+api_key = "86f6d790e07d4c4cacddef80790bec22"
 
-headers = {"Ocp-Apim-Subscription-Key": api_key}  # Some APIs require headers
+headers = {"Ocp-Apim-Subscription-Key": api_key}
 
 response = requests.get(url, headers=headers)
 
 games = response.json()
-result_text = ''
-for game in games:
-    if game['AwayTeam'] == 'LAD' or game['HomeTeam'] == 'LAD':
-        if game['AwayTeam'] == 'LAD':
-            away_runs = game['AwayTeamRuns']
-            home_runs = game['HomeTeamRuns']
-            if away_runs > home_runs:
-                result_text = 'yep'
-            else:
-                result_text = 'nope'
-        if game['HomeTeam'] == 'LAD':
-            away_runs = game['AwayTeamRuns']
-            home_runs = game['HomeTeamRuns']
-            if home_runs > away_runs:
-                result_text = 'yep'
-            else:
-                result_text = 'nope'
-        if result_text == '':
-            result_text = 'no game today'
-                
-url = f"https://api.sportsdata.io/v3/mlb/scores/json/Games/2025"
+games = pd.DataFrame(games)
+games = games.sort_values(by='GameEndDateTime', ascending=False).reset_index(drop=True)
+
+def outcome(interest, games):
+
+    games = games[(games['HomeTeam'] == interest) | (games['AwayTeam'] == interest)]
+
+    if len(games) == 0:
+        result = 'no game yesterday'
+        return result
+
+    games = games.iloc[0]
+
+    team = 'AwayTeamRuns'
+    vs = 'HomeTeamRuns'
+    result = 'nope'
+
+    if games['Status'] != 'Final':
+        result = 'up in the air'
+    if games['HomeTeam'] == interest:
+        team = 'HomeTeamRuns'
+        vs = 'AwayTeamRuns'
+
+    if games[team] > games[vs]:
+        result = 'yep'
+
+    if interest == 'COL': ## did the rockies lose?
+        result = {'yep': 'nope', 'nope': 'yep'}.get(result, result)
+
+    return result
+
+url = f'https://api.sportsdata.io/v3/mlb/scores/json/Games/2025'
 api_key = "86f6d790e07d4c4cacddef80790bec22"  # Keep API keys private!
 headers = {"Ocp-Apim-Subscription-Key": api_key}  # Some APIs require headers
-
 response = requests.get(url, headers=headers)
 schedules = response.json()
 
-lads = []
+schedules = pd.DataFrame(schedules)
+final = schedules[schedules['Status'] == 'Final']
+completed = schedules[schedules['Status'] == 'Completed']
+schedules = schedules[schedules['Status'] == 'Scheduled']
+schedules = schedules.sort_values(by='Day').reset_index(drop=True)
 
-for schedule in schedules:
-    if schedule['AwayTeam'] == 'LAD' or schedule['HomeTeam'] == 'LAD':
-        lads.append(schedule)
-        
-delta = timedelta(days=1000)
+def upcoming(interest, schedules):
 
-for lad in lads:
-    game_date = datetime.strptime(lad['DateTime'], "%Y-%m-%dT%H:%M:%S")
-    btwn = game_date - est_time.replace(tzinfo=None)
-    if btwn < delta and btwn >= timedelta(days=0):
-        delta = btwn
-        home_team = lad['HomeTeam']
-        away_team = lad['AwayTeam']
-        gamer = game_date.date().strftime('%Y-%m-%d')
-        
+    schedule = schedules[(schedules['HomeTeam'] == interest) | (schedules['AwayTeam'] == interest)].reset_index(drop=True)
 
-# Generate HTML content
-html_content = f'''
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>did the dodgers win</title>
-    <style>
-        body {{
-            background-color: #005A9C; /* Dodger Blue */
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }}
+    if len(schedule) == 0:
+        up_next = 'offseason'
+        return up_next
 
-        .container {{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px; /* Ensure some top spacing */
-        }}
+    schedule = schedule.iloc[0]
+    game_date = datetime.strptime(schedule['Day'], "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
+    up_next = f"{game_date}, {schedule['AwayTeam']} @ {schedule['HomeTeam']}"
+    return up_next
 
-        h1 {{
-            font-size: 3em;
-            margin-bottom: 0.5em; /* Add some spacing below the header */
-        }}
+def record(interest, final):
 
-        p {{
-            font-size: 1.5em;
-            margin: 0.5em 0;
-        }}
+    final = final[(final['HomeTeam'] == interest) | (final['AwayTeam'] == interest)].reset_index(drop=True)
+    final.loc[(final['HomeTeam'] == interest) & (final['HomeTeamRuns'] > final['AwayTeamRuns']), 'wins'] = 1
+    final.loc[(final['AwayTeam'] == interest) & (final['HomeTeamRuns'] < final['AwayTeamRuns']), 'wins'] = 1
+    final.loc[(final['HomeTeam'] == interest) & (final['HomeTeamRuns'] < final['AwayTeamRuns']), 'losses'] = 1
+    final.loc[(final['AwayTeam'] == interest) & (final['HomeTeamRuns'] > final['AwayTeamRuns']), 'losses'] = 1
+    final.loc[final['HomeTeamRuns'] == final['AwayTeamRuns'], 'ties'] = 1
 
-        img {{
-            width: 80%; /* Makes the image take 80% of the container width */
-            max-width: 600px; /* Ensure the image doesn't get too large */
-            height: auto; /* Maintain aspect ratio */
-            margin-top: 20px; /* Add spacing between text and image */
-        }}
+    wins = str(int(final.wins.sum()))
+    losses = str(int(final.losses.sum()))
+    ties = str(int(final.ties.sum()))
+    record = wins + '-' + losses + '-' + ties
+    
+    return record
 
-        .spacer {{
-            margin: 2em 0; /* Adds vertical spacing */
-        }}
+def web(result, record, up_next, est, title, color):  
 
-        .small-text {{
-            font-size: 0.8em; /* Smaller font size */
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>did the dodgers win?</h1>
-        <p>{result_text}</p>
-        <p>up next: {gamer}, {away_team} @ {home_team}</p>
-        <div class="spacer"></div>
-        <div class="spacer"></div>
-        <div class="spacer"></div>
-        <p class="small-text">last updated: {est}</p>
-    </div>
-</body>
-</html>
-'''
+    page = f'''
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>did the dodgers win</title>
+            <style>
+                body {{
+                    background-color: {color}; /* Team Color */
+                    color: white;
+                    font-family: Arial, sans-serif;
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                    height: 100vh;
+                    margin: 0;
+                    text-align: center;
+                }}
 
-# Write the HTML to a file
+                .container {{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: 20px; /* Ensure some top spacing */
+                }}
+
+                h1 {{
+                    font-size: 3em;
+                    margin-bottom: 0.5em; /* Add some spacing below the header */
+                }}
+
+                p {{
+                    font-size: 1.5em;
+                    margin: 0.5em 0;
+                }}
+
+                img {{
+                    width: 80%; /* Makes the image take 80% of the container width */
+                    max-width: 600px; /* Ensure the image doesn't get too large */
+                    height: auto; /* Maintain aspect ratio */
+                    margin-top: 20px; /* Add spacing between text and image */
+                }}
+
+                .spacer {{
+                    margin: 2em 0; /* Adds vertical spacing */
+                }}
+
+                .small-text {{
+                    font-size: 0.8em; /* Smaller font size */
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>{title}</h1>
+                <p>{result}</p>
+                <p>record: {record}</p>
+                <p>up next: {up_next}</p>
+                <div class="spacer"></div>
+                <div class="spacer"></div>
+                <div class="spacer"></div>
+                <p class="small-text">last updated: {est}</p>
+                <div class="spacer"></div>
+                <button onclick="window.location.href='index.html'" style="padding:
+                    10px 20px; font-size: 1em; cursor: pointer;">
+                    go back
+                </button>
+            </div>
+        </body>
+        </html>
+        '''
+
+    return page
+ 
+
+for team, info in teams.items():
+
+    abbr = info['abbr']
+    color = info['color']
+    nickname = info['nickname']
+
+    if abbr == 'COL':
+        title = f'did the {nickname} lose'
+    else:
+        title = f'did the {nickname} win'
+
+    result = outcome(abbr, games)
+    season = record(abbr, final)
+    up_next = upcoming(abbr, schedules)
+    page = web(result, season, up_next, est, title, color)
+
+    with open(f"{nickname}.html", "w") as file:
+        file.write(page)
+
+
+index = '''
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>this is baseball</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100vh;
+                font-family: Arial, sans-serif;
+            }
+
+            .container {
+                height: 37.5vh; /* 3/8 of viewport height */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            h1 {
+                margin: 0;
+                font-size: 2em;
+            }
+
+            .controls {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
+            #teamDropdown {
+                padding: 8px;
+                font-size: 16px;
+            }
+
+            button {
+                padding: 8px 16px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+        </style>          
+    </head>
+    <body>
+        <div class="container">
+            <h1>pick your team</h1>
+            <div class="controls">
+                <select id="teamDropdown">
+                    <option value="" disabled selected>select:</option>
+                    <option value="diamondbacks">arizona diamondbacks</option>
+                    <option value="braves">atlanta braves</option>
+                    <option value="orioles">baltimore orioles</option>
+                    <option value="red sox">boston red sox</option>
+                    <option value="cubs">chicago cubs</option>
+                    <option value="white sox">chicago white sox</option>
+                    <option value="reds">cincinnati reds</option>
+                    <option value="guardians">cleveland guardians</option>
+                    <option value="rockies">colorado rockies</option>
+                    <option value="tigers">detroit tigers</option>
+                    <option value="athletics">homeless athletics</option>
+                    <option value="astros">houston astros</option>
+                    <option value="royals">kansas city royals</option>
+                    <option value="angels">los angeles angels</option>
+                    <option value="dodgers">los angeles dodgers</option>
+                    <option value="marlins">miami marlins</option>
+                    <option value="brewers">milwaukee brewers</option>
+                    <option value="twins">minnesota twins</option>
+                    <option value="mets">new york mets</option>
+                    <option value="yankees">new york yankees</option>
+                    <option value="phillies">philidelphia phillies</option>
+                    <option value="pirates">pittsburgh pirates</option>
+                    <option value="padres">san diego padres</option>
+                    <option value="giants">san francisco giants</option>
+                    <option value="mariners">seattle mariners</option>
+                    <option value="cardinals">st. louis cardinals</option>
+                    <option value="rays">tampa bay rays</option>
+                    <option value="rangers">texas rangers</option>
+                    <option value="blue jays">toronto blue jays</option>
+                    <option value="nationals">washington nationals</option>
+                </select>
+                <button onclick="redirectToTeamPage()">Select</button>
+            </div>
+        </div>
+        <script>
+            function redirectToTeamPage() {
+            const team = document.getElementById("teamDropdown").value;
+                if (team) {
+                    window.location.href = `${team}.html`;
+                } else{
+                    alert("team?");
+                }
+            }
+        </script>
+    </body>
+    </html>
+    '''
+
 with open("index.html", "w") as file:
-    file.write(html_content)
+    file.write(index)
