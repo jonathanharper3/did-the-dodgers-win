@@ -318,111 +318,152 @@ index = '''
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>this is baseball</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>baseball</title>
         <style>
+            * { box-sizing: border-box; }
+
             body {
                 margin: 0;
-                padding: 0;
                 height: 100vh;
-                font-family: Arial, sans-serif;
+                font-family: -apple-system, BlinkMacSystemFont, sans-serif;
                 display: flex;
                 flex-direction: column;
-            }
-
-            .main-content {
-                flex: 1;
-                display: flex;
                 align-items: center;
                 justify-content: center;
                 gap: 20px;
+                padding: 20px;
+                background: #f5f5f5;
             }
 
             h1 {
                 margin: 0;
-                font-size: 2em;
+                font-size: clamp(1.5rem, 5vw, 2.5rem);
+                color: #333;
             }
 
             .controls {
                 display: flex;
-                gap: 10px;
+                gap: 15px;
                 align-items: center;
+                flex-wrap: wrap;
             }
 
-            #teamDropdown {
-                padding: 8px;
+            select, button {
+                padding: 12px 16px;
                 font-size: 16px;
+                border: 2px solid #ddd;
+                border-radius: 8px;
+                background: white;
+            }
+
+            select {
+                min-width: 200px;
             }
 
             button {
-                padding: 8px 16px;
-                font-size: 16px;
+                background: #2c5234;
+                color: white;
+                border-color: #2c5234;
                 cursor: pointer;
+                font-weight: 600;
+            }
+
+            button:hover {
+                background: #1a3020;
+            }
+
+            button:disabled {
+                background: #ccc;
+                cursor: not-allowed;
             }
 
             .footer {
-                padding: 20px;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 15px;
                 text-align: center;
                 font-size: 0.9em;
                 color: #666;
-                line-height: 1.4;
+                background: white;
                 border-top: 1px solid #eee;
             }
-        </style>          
+
+            @media (max-width: 600px) {
+                .controls {
+                    flex-direction: column;
+                    width: 100%;
+                }
+
+                select, button {
+                    width: 100%;
+                    max-width: 300px;
+                }
+
+                .footer {
+                    position: relative;
+                    margin-top: 40px;
+                }
+            }
+        </style>
     </head>
     <body>
-        <div class="main-content">
-            <div class="controls">
-                <h1>pick your team</h1>
-                <select id="teamDropdown">
-                    <option value="" disabled selected>select:</option>
-                    <option value="diamondbacks">arizona diamondbacks</option>
-                    <option value="braves">atlanta braves</option>
-                    <option value="orioles">baltimore orioles</option>
-                    <option value="red sox">boston red sox</option>
-                    <option value="cubs">chicago cubs</option>
-                    <option value="white sox">chicago white sox</option>
-                    <option value="reds">cincinnati reds</option>
-                    <option value="guardians">cleveland guardians</option>
-                    <option value="rockies">colorado rockies</option>
-                    <option value="tigers">detroit tigers</option>
-                    <option value="athletics">homeless athletics</option>
-                    <option value="astros">houston astros</option>
-                    <option value="royals">kansas city royals</option>
-                    <option value="angels">los angeles angels</option>
-                    <option value="dodgers">los angeles dodgers</option>
-                    <option value="marlins">miami marlins</option>
-                    <option value="brewers">milwaukee brewers</option>
-                    <option value="twins">minnesota twins</option>
-                    <option value="mets">new york mets</option>
-                    <option value="yankees">new york yankees</option>
-                    <option value="phillies">philadelphia phillies</option>
-                    <option value="pirates">pittsburgh pirates</option>
-                    <option value="padres">san diego padres</option>
-                    <option value="giants">san francisco giants</option>
-                    <option value="mariners">seattle mariners</option>
-                    <option value="cardinals">st. louis cardinals</option>
-                    <option value="rays">tampa bay rays</option>
-                    <option value="rangers">texas rangers</option>
-                    <option value="blue jays">toronto blue jays</option>
-                    <option value="nationals">washington nationals</option>
-                </select>
-                <button onclick="redirectToTeamPage()">Select</button>
-            </div>
+        <div class="controls">
+            <h1>pick your team</h1>
+            <select id="teamDropdown">
+                <option value="">select a team...</option>
+                <option value="diamondbacks">arizona diamondbacks</option>
+                <option value="braves">atlanta braves</option>
+                <option value="orioles">baltimore orioles</option>
+                <option value="red sox">boston red sox</option>
+                <option value="cubs">chicago cubs</option>
+                <option value="white sox">chicago white sox</option>
+                <option value="reds">cincinnati reds</option>
+                <option value="guardians">cleveland guardians</option>
+                <option value="rockies">colorado rockies</option>
+                <option value="tigers">detroit tigers</option>
+                <option value="athletics">homeless athletics</option>
+                <option value="astros">houston astros</option>
+                <option value="royals">kansas city royals</option>
+                <option value="angels">los angeles angels</option>
+                <option value="dodgers">los angeles dodgers</option>
+                <option value="marlins">miami marlins</option>
+                <option value="brewers">milwaukee brewers</option>
+                <option value="twins">minnesota twins</option>
+                <option value="mets">new york mets</option>
+                <option value="yankees">new york yankees</option>
+                <option value="phillies">philadelphia phillies</option>
+                <option value="pirates">pittsburgh pirates</option>
+                <option value="padres">san diego padres</option>
+                <option value="giants">san francisco giants</option>
+                <option value="mariners">seattle mariners</option>
+                <option value="cardinals">st. louis cardinals</option>
+                <option value="rays">tampa bay rays</option>
+                <option value="rangers">texas rangers</option>
+                <option value="blue jays">toronto blue jays</option>
+                <option value="nationals">washington nationals</option>
+            </select>
+            <button onclick="goToTeam()" id="btn">select</button>
         </div>
 
         <div class="footer">
-            This website pulls data from sportsdata.io's free API. This source returns scrambled runs data, 
-            and results are not always accurate. This website is an extension of an earlier static webpage 
-            called "Did The Dodgers Win".
+            This website pulls data from sportsdata.io's free API. Results may not be accurate.
+            Extension of "Did The Dodgers Win".
         </div>
 
         <script>
-            function redirectToTeamPage() {
-                const team = document.getElementById("teamDropdown").value;
+            const dropdown = document.getElementById('teamDropdown');
+            const btn = document.getElementById('btn');
+
+            dropdown.onchange = () => btn.disabled = !dropdown.value;
+            btn.disabled = true;
+
+            function goToTeam() {
+                const team = dropdown.value;
                 if (team) {
                     window.location.href = `${team}.html`;
-                } else {
-                    alert("team?");
                 }
             }
         </script>
