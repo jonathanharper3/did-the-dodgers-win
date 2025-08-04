@@ -9,4 +9,5 @@ FAQ:<br>
 Why? -- Why not?<br>
 Why are the scores wrong? -- I am using a free API. Send me money, and the scores will be right.<br>
 Why is it called "did the dodgers win"? -- This initially was a static webpage showing only the results from the Dodgers game. It has evolved to show all MLB games.<br>
-Can we get other sports? -- Maybe!
+Can we get other sports? -- No
+Why did you turn off the scheduler? -- The API changed
