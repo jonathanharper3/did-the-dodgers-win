@@ -1,7 +1,7 @@
 name: update did the dodgers win
 on:
-   schedule:
-     - cron: '0 9 * * *'  # 9 AM UTC daily
+   # schedule:
+   #   - cron: '0 9 * * *'  # 9 AM UTC daily
    workflow_dispatch:
 jobs:
   update-page:
